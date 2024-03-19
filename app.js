@@ -132,4 +132,4 @@ app.delete('/university/:id',(req, res) => {
     res.json({'message':'university deleted successfully'})
 })
 // Starting the server and listening for incoming requests on port 3000
-app.listen(3000, console.log('listening on port 3000'))
+app.listen(3300, console.log('listening on port 3000'))
