@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost:27017/test').then(()=>{
 
 app.use(express.json())
 
-const university_route = require('./routes/university')
+const user_route = require('./routes/bookstore')
 
-app.use('/university',university_route)
+app.use('/bookstore',user_route)
 
