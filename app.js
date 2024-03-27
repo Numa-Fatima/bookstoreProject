@@ -1,21 +1,20 @@
 require('dotenv').config();
 const express = require('express')
-const mongoose = require('mongoose')
-const user_route = require('./routes/bookstore')
+const connectDB = require('./db')
+const user_route = require('./routes/userRoutes')
 const auth_route = require('./routes/authRoutes'); 
 
-
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT
 
-mongoose.connect('mongodb://localhost:27017/test').then(()=>{
-    app.listen(PORT, console.log(`listening on port ${PORT}`))
-}).catch(err => console.log(err)) // should be in spreate file. 
+connectDB()
 
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`)})
 
   
 app.use(express.json())
-app.use('/bookstore',user_route)
+app.use('/user',user_route)
 app.use('/auth', auth_route);
 
 
