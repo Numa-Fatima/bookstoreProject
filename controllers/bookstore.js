@@ -116,19 +116,6 @@ const createUser = async (req, res) => {
     }
 }
 
-
-/*const createUser = async (req, res) => {
-    try {
-        const newUserData = req.body;
-        const newUser = new userModel(newUserData);
-        await newUser.save();
-        return res.status(201).json({ user: newUser });
-        
-    } catch (error) {
-        return res.status(500).json({ error: error });
-    }
-}*/
-
 const updateUserByEmail = async (req, res) => {
     try {
         const email = req.params.email; 
