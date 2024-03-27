@@ -7,6 +7,10 @@ const loginUser = async (req, res) => {
     try {
         const { username, password } = req.body;
 
+        if (!username || !password) {
+            return res.status(400).json({ error: "Username and password are required fields." });
+        }
+
         // Check if username exists
         const user = await userModel.findOne({ username });
         if (!user) {
@@ -37,6 +41,10 @@ const createUser = async (req, res) => {
             confirmPassword,
             phoneNumber
         } = req.body;
+
+        if (!username || !email || !password || !confirmPassword) {
+            return res.status(400).json({ error: "Username, email, password, and confirmPassword are required fields." });
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
