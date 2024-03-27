@@ -1,4 +1,6 @@
 const userModel = require('../models/bookstore');
+const bcrypt = require('bcryptjs');
+
 
 const getAllUsers = async (req, res) => {
     try {
@@ -21,7 +23,7 @@ const loginUser = async (req, res) => {
         }
 
         // Check if password is correct
-        const isPasswordValid = await user.comparePassword(password);
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(400).json({ error: "Incorrect password." });
         }
@@ -57,6 +59,8 @@ const createUser = async (req, res) => {
             confirmPassword,
             phoneNumber
         } = req.body;
+
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Validation for Username
         const usernameRegex = /^[A-Za-z0-9_.]{6,25}$/;
@@ -101,7 +105,7 @@ const createUser = async (req, res) => {
         const newUser = new userModel({
             username,
             email,
-            password,
+            password: hashedPassowrd,
             phoneNumber
         });
         await newUser.save();
