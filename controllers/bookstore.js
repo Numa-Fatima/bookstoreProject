@@ -1,5 +1,7 @@
 const userModel = require('../models/bookstore');
 const bcrypt = require('bcryptjs');
+const signToken = require('../auth');
+
 
 
 const getAllUsers = async (req, res) => {
@@ -29,7 +31,8 @@ const loginUser = async (req, res) => {
         }
 
         // Login successful
-        return res.status(200).json({ success: "Login successful." });
+        const token = signToken(user.id);
+        return res.status(200).json({ success: "Login successful.",token });
 
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -85,7 +88,7 @@ const createUser = async (req, res) => {
         }
 
         // Validation for Password
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])[A-Za-z\d@$]{8,16}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])[A-Za-z0-9@$]{8,16}$/;
         if (!passwordRegex.test(password)) {
             return res.status(400).json({ error: "Invalid password format. Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 digit, 1 special character '@' or '$', and be between 8 and 16 characters long." });
         }
@@ -109,7 +112,8 @@ const createUser = async (req, res) => {
             phoneNumber
         });
         await newUser.save();
-        return res.status(201).json({ success: "User created successfully", user: newUser });
+        const token = signToken(newUser.id);
+        return res.status(201).json({ success: "User created successfully", user: newUser, token });
 
     } catch (error) {
         return res.status(500).json({ error: error.message });
