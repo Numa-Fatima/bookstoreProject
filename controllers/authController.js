@@ -1,7 +1,9 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const userModel = require('../models/userModel');
-const signToken = require('../Utils/jwt');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const userModel = require('../models/userModel')
+const signToken = require('../Utils/jwt')
+const crypto = require('crypto')
+
 
 const loginUser = async (req, res) => {
     try {
@@ -103,7 +105,26 @@ const createUser = async (req, res) => {
     }
 }
 
+//user sends a POST req with thier email, we will then create a reset token (NOT jwt) and send to the email
+ const forgetPassword = async (req, res) =>{
+    const user = await userModel.findOne({ email:req.body.email })
+    if(!user){
+        return res.status(404).json({ error: "User with entered email not found." });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex')
+    user.passwordResetToken=crypto.createHash('sha256').update(resetToken).digest('hex')
+    user.passwordResetExpires=Date.now() + 10*60*1000
+
+ }
+
+//user sends the token and password is updated
+ const resetPassword=async (req, res) =>{}
+
 module.exports = {
     loginUser,
-    createUser
+    createUser,
+    forgetPassword,
+    resetPassword
+
 }

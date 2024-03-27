@@ -1,12 +1,17 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/test');
+    const DB = process.env.MONGODB_URI.replace('<password>', process.env.DATABASE_PASSWORD);
+    await mongoose.connect(DB);
     console.log('MongoDB connected successfully');
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error.message);
   }
 };
 
 module.exports = connectDB;
+
+
+
